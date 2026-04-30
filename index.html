@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CryptoNepal - क्रिप्टो मूल्य</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:        #070910;
+      --card:      #0e1118;
+      --card2:     #141824;
+      --border:    #1c2233;
+      --red:       #c0392b;
+      --red-light: #e74c3c;
+      --gold:      #f0a500;
+      --gold-l:    #fbbf24;
+      --green:     #16a34a;
+      --green-l:   #22c55e;
+      --text:      #e8eaf0;
+      --muted:     #5a6478;
+      --accent:    #3b82f6;
+      --accent-l:  #60a5fa;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ══════════════════════════════════════════
+       HEADER
+    ══════════════════════════════════════════ */
+    header {
+      background: linear-gradient(135deg, #c0392b 0%, #7f1212 55%, #100a04 100%);
+      position: relative; overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 12px 24px;
+      position: relative; z-index: 1;
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    }
+    .logo-area { display: flex; align-items: center; gap: 14px; }
+    .logo-flag {
+      width: 36px; height: 36px; background: white; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .logo-text h1 { font-size: 1.3rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+    .logo-text p  { font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 2px; }
+    .header-meta { text-align: right; }
+    .header-meta .tagline { font-size: 0.8rem; color: rgba(255,255,255,0.88); font-weight: 500; }
+    .header-meta .date { font-size: 0.72rem; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+    /* ══════════════════════════════════════════
+       RATE TICKER
+    ══════════════════════════════════════════ */
+    .rate-ticker {
+      background: #0b0d14;
+      border-bottom: 1px solid var(--border);
+      padding: 9px 24px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; flex-wrap: wrap;
+      font-size: 0.8rem; color: var(--muted);
+    }
+    .rate-ticker .gold  { color: var(--gold-l); font-weight: 600; }
+    .rate-ticker .sep   { color: #2a3040; }
+
+    /* ══════════════════════════════════════════
+       HERO BANNER BOX
+    ══════════════════════════════════════════ */
+    .hero-section {
+      padding: 32px 24px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      min-height: 320px;
+    }
+
+    /* animated grid background */
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridDrift 20s linear infinite;
+    }
+    @keyframes gridDrift { 0%{background-position:0 0} 100%{background-position:40px 40px} }
+
+    /* radial glow in center */
+    .hero-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%,
+        rgba(192,57,43,0.12) 0%, transparent 70%);
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 32px 28px 28px;
+    }
+
+    .hero-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; flex-wrap: wrap; gap: 20px;
+      margin-bottom: 28px;
+    }
+    .hero-headline h2 {
+      font-size: 1.6rem; font-weight: 800;
+      background: linear-gradient(135deg, #fff 30%, #f0a500 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    .hero-headline p {
+      color: var(--muted); font-size: 0.85rem; margin-top: 6px;
+    }
+    .live-dot {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 0.78rem; color: var(--green-l);
+      font-weight: 600; padding: 5px 12px;
+      background: rgba(22,163,74,0.12);
+      border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 20px;
+    }
+    .live-dot::before {
+      content: '';
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green-l);
+      animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:0.4; transform:scale(0.7); }
+    }
+
+    /* ── Coin animation strip ── */
+    .coin-strip {
+      display: flex; align-items: center;
+      gap: 40px; flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .coin-bubble {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      cursor: default;
+    }
+    .coin-anim-wrap {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    /* outer glow ring */
+    .coin-anim-wrap::before {
+      content: '';
+      position: absolute; inset: -4px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      animation: ringRotate 3s linear infinite;
+    }
+    .coin-anim-wrap.btc  { background: radial-gradient(circle, #1f1208 60%, #0e0904); }
+    .coin-anim-wrap.btc::before  { border-top-color: #f7931a; border-right-color: rgba(247,147,26,0.3); }
+    .coin-anim-wrap.eth  { background: radial-gradient(circle, #0c0c1e 60%, #07071a); }
+    .coin-anim-wrap.eth::before  { border-top-color: #627eea; border-right-color: rgba(98,126,234,0.3); }
+    .coin-anim-wrap.bnb  { background: radial-gradient(circle, #1a1400 60%, #0e0c00); }
+    .coin-anim-wrap.bnb::before  { border-top-color: #f3ba2f; border-right-color: rgba(243,186,47,0.3); }
+    .coin-anim-wrap.sol  { background: radial-gradient(circle, #0d0a1e 60%, #06051a); }
+    .coin-anim-wrap.sol::before  { border-top-color: #9945ff; border-right-color: rgba(153,69,255,0.3); }
+    .coin-anim-wrap.xrp  { background: radial-gradient(circle, #001012 60%, #000c0e); }
+    .coin-anim-wrap.xrp::before  { border-top-color: #00aae4; border-right-color: rgba(0,170,228,0.3); }
+    .coin-anim-wrap.doge { background: radial-gradient(circle, #1a1200 60%, #0e0a00); }
+    .coin-anim-wrap.doge::before { border-top-color: #c3a634; border-right-color: rgba(195,166,52,0.3); }
+
+    @keyframes ringRotate { to { transform: rotate(360deg); } }
+
+    .coin-anim-wrap img {
+      width: 44px; height: 44px; border-radius: 50%;
+      animation: floatCoin 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.15));
+    }
+    .coin-bubble:nth-child(1) .coin-anim-wrap img { animation-delay: 0s; }
+    .coin-bubble:nth-child(2) .coin-anim-wrap img { animation-delay: 0.5s; }
+    .coin-bubble:nth-child(3) .coin-anim-wrap img { animation-delay: 1s; }
+    .coin-bubble:nth-child(4) .coin-anim-wrap img { animation-delay: 1.5s; }
+    .coin-bubble:nth-child(5) .coin-anim-wrap img { animation-delay: 2s; }
+    .coin-bubble:nth-child(6) .coin-anim-wrap img { animation-delay: 2.5s; }
+
+    @keyframes floatCoin {
+      0%,100% { transform: translateY(0px)   scale(1); }
+      50%      { transform: translateY(-8px)  scale(1.05); }
+    }
+
+    .coin-label { font-size: 0.72rem; color: var(--muted); font-weight: 600; letter-spacing: 0.5px; }
+    .coin-mini-price { font-size: 0.78rem; font-weight: 700; color: var(--text); }
+    .coin-mini-change {
+      font-size: 0.68rem; font-weight: 600;
+      padding: 1px 5px; border-radius: 4px;
+    }
+    .coin-mini-change.up   { color: var(--green-l); background: rgba(34,197,94,0.12); }
+    .coin-mini-change.down { color: var(--red-light); background: rgba(231,76,60,0.12); }
+
+    /* ── Hero top stats row ── */
+    .hero-stats {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat {
+      flex: 1; min-width: 140px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .hero-stat .label { font-size: 0.88rem; color: #c8cfe0; font-weight: 500; }
+    .hero-stat .label .ne { font-size: 0.78rem; display: block; color: #7a8299; margin-top: 1px; }
+    .hero-stat .val { font-size: 1.1rem; font-weight: 700; color: var(--gold-l); }
+    .hero-stat .val-usd { font-size: 0.78rem; color: var(--accent-l); margin-top: 2px; }
+
+    /* ══════════════════════════════════════════
+       MARKET SECTION
+    ══════════════════════════════════════════ */
+    main { max-width: 1200px; margin: 0 auto; padding: 36px 24px 0; }
+
+    .section-head {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; margin-bottom: 24px;
+    }
+    .section-title {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--red-light); flex-shrink: 0;
+    }
+    .section-title h2 { font-size: 1.25rem; font-weight: 700; }
+    .section-title .ne { font-size: 0.88rem; color: var(--muted); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Grid ── */
+    #crypto-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── Price Card ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 18px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .card::after {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      border-radius: 16px 16px 0 0;
+    }
+    .card.up::after   { background: linear-gradient(90deg, var(--green), var(--green-l)); }
+    .card.down::after { background: linear-gradient(90deg, #8b0000, var(--red-light)); }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #263050;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    .card-header {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 14px;
+    }
+    .coin-info { display: flex; align-items: center; gap: 11px; }
+    .coin-icon {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--card2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 21px;
+    }
+    .coin-icon img { width: 34px; height: 34px; border-radius: 50%; }
+    .coin-name   { font-size: 0.95rem; font-weight: 600; }
+    .coin-symbol { font-size: 0.7rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .change-badge {
+      padding: 4px 9px; border-radius: 7px;
+      font-size: 0.78rem; font-weight: 700;
+      display: flex; align-items: center; gap: 3px;
+    }
+    .change-badge.up   { background: rgba(34,197,94,0.12); color: var(--green-l); }
+    .change-badge.down { background: rgba(231,76,60,0.12);  color: var(--red-light); }
+
+    .prices { display: flex; flex-direction: column; gap: 8px; }
+    .price-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 9px 13px;
+      background: var(--card2); border-radius: 9px;
+    }
+    .price-label { font-size: 0.73rem; color: var(--muted); display: flex; flex-direction: column; gap: 2px; }
+    .price-label .ne { font-size: 0.66rem; color: #333d52; }
+    .price-val { font-size: 1rem; font-weight: 700; }
+    .price-val.usd { color: var(--accent-l); }
+    .price-val.nrs { color: var(--gold-l); }
+
+    /* ── Skeleton ── */
+    .sk { background: linear-gradient(90deg, var(--card2) 25%, #1a2030 50%, var(--card2) 75%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; border-radius: 10px; }
+    @keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+    .sk-card { height: 175px; border-radius: 16px; border: 1px solid var(--border); }
+
+    /* ── Error ── */
+    #error-box {
+      display: none;
+      background: #120606; border: 1px solid #4a1010;
+      border-radius: 14px; padding: 28px; text-align: center;
+      margin: 40px auto; max-width: 480px;
+    }
+    #error-box .emoji { font-size: 2.5rem; margin-bottom: 14px; }
+    #error-box p { color: #f87171; margin-bottom: 6px; font-size: 0.9rem; }
+    #error-box small { color: var(--muted); font-size: 0.75rem; }
+
+    /* ══════════════════════════════════════════
+       JOIN THE TEAM SECTION
+    ══════════════════════════════════════════ */
+    .join-section {
+      max-width: 1200px; margin: 52px auto 0;
+      padding: 0 24px 60px;
+    }
+
+    .join-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* top accent stripe */
+    .join-box::before {
+      content: '';
+      display: block;
+      height: 4px;
+      background: linear-gradient(90deg, #c0392b, #e74c3c, #f0a500, #e74c3c, #c0392b);
+      background-size: 200% 100%;
+      animation: gradShift 4s linear infinite;
+    }
+    @keyframes gradShift { 0%{background-position:0%} 100%{background-position:200%} }
+
+    /* bg pattern */
+    .join-box::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 100%,
+        rgba(192,57,43,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .join-inner {
+      position: relative; z-index: 1;
+      padding: 44px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 52px;
+      align-items: start;
+    }
+
+    /* ── Left: message ── */
+    .join-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gold-l);
+      background: rgba(240,165,0,0.1);
+      border: 1px solid rgba(240,165,0,0.25);
+      padding: 5px 12px; border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .join-left h2 {
+      font-size: 1.55rem; font-weight: 800;
+      line-height: 1.3; margin-bottom: 16px;
+      color: #fff;
+    }
+    .join-left h2 .ne {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--gold-l);
+      font-weight: 700;
+    }
+    .join-msg {
+      font-size: 0.88rem; line-height: 1.75;
+      color: #9ca3b8; margin-bottom: 20px;
+    }
+    .join-msg .ne-block {
+      display: block;
+      font-size: 0.85rem; color: #6b7899;
+      margin-top: 12px; padding-top: 12px;
+      border-top: 1px solid var(--border);
+      line-height: 1.7;
+    }
+
+    .join-perks {
+      display: flex; flex-direction: column; gap: 9px;
+      margin-top: 20px;
+    }
+    .join-perk {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.83rem; color: #9ca3b8;
+    }
+    .join-perk .icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: rgba(192,57,43,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+
+    /* ── Right: form ── */
+    .join-right h3 {
+      font-size: 1rem; font-weight: 700;
+      margin-bottom: 6px; color: #fff;
+    }
+    .join-right p { font-size: 0.8rem; color: var(--muted); margin-bottom: 22px; }
+
+
+    .email-highlight {
+      background: rgba(240,165,0,0.07);
+      border: 1px solid rgba(240,165,0,0.2);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.82rem;
+    }
+    .email-highlight .label { color: var(--muted); flex-shrink: 0; }
+    .email-highlight a {
+      color: var(--gold-l); font-weight: 600;
+      text-decoration: none;
+    }
+    .email-highlight a:hover { text-decoration: underline; }
+
+    .btn-submit {
+      display: block; width: 100%;
+      background: linear-gradient(135deg, #c0392b, #e74c3c);
+      color: #fff; text-decoration: none; text-align: center;
+      padding: 13px 20px; border-radius: 11px;
+      font-size: 0.9rem; font-weight: 700;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+    }
+    .btn-submit:hover {
+      opacity: 0.92; transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(192,57,43,0.45);
+    }
+    .btn-submit:active { transform: translateY(0); }
+
+    .form-note {
+      text-align: center; margin-top: 10px;
+      font-size: 0.72rem; color: #3a4258;
+    }
+
+    /* ══════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════ */
+    footer {
+      text-align: center;
+      padding: 22px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted); font-size: 0.75rem;
+    }
+    footer .heart { color: var(--red-light); }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════ */
+    @media (max-width: 860px) {
+      .join-inner { grid-template-columns: 1fr; gap: 32px; padding: 28px 24px; }
+    }
+    @media (max-width: 640px) {
+      .logo-text h1 { font-size: 1.4rem; }
+      .hero-content { padding: 20px 16px 18px; }
+      .hero-headline h2 { font-size: 1.2rem; }
+      .coin-anim-wrap { width: 58px; height: 58px; }
+      .coin-anim-wrap img { width: 36px; height: 36px; }
+      .hero-stat .val { font-size: 0.95rem; }
+      #crypto-grid { grid-template-columns: 1fr; }
+      .join-inner { padding: 22px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<header>
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-flag">🇳🇵</div>
+      <div class="logo-text">
+        <h1>CryptoForNepal</h1>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div class="tagline">Live Prices </div>
+      <div class="date" id="header-date">लोड हुँदैछ...</div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════ RATE TICKER ══════════ -->
+<div class="rate-ticker">
+  <span class="sep">|</span>
+  <span>1 USD = <span class="gold" id="usd-nrs-rate">—</span> NPR</span>
+  <span class="sep">·</span>
+  <span id="rate-source" style="color:#3a4258">लाइभ दर</span>
+  <span class="sep">·</span>
+  <span> Auto-updates every 60s</span>
+</div>
+
+<!-- ══════════ HERO BANNER BOX ══════════ -->
+<div class="hero-section">
+  <div class="hero-box">
+    <div class="hero-bg"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+
+      <div class="hero-top">
+        <div class="hero-headline">
+          <h2>आजको Crypto बजार<br><span style="font-size:1.1rem;font-weight:500;color:#9ca3b8">Today's Cryptocurrency Market</span></h2>
+        </div>
+        <div class="live-dot">LIVE</div>
+      </div>
+
+      <!-- animated coin bubbles -->
+      <div class="coin-strip" id="hero-coins">
+        <!-- filled by JS -->
+        <div class="coin-bubble">
+          <div class="coin-anim-wrap btc">
+            <img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" alt="BTC" onerror="this.parentElement.textContent='₿'" />
+          </div>
+          <div class="coin-label">BTC</div>
+          <div class="coin-mini-price" id="h-btc-price">—</div>
+          <div class="coin-mini-change" id="h-btc-ch">—</div>
+        </div>
+        <div class="coin-bubble">
+          <div class="coin-anim-wrap eth">
+            <img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" alt="ETH" onerror="this.parentElement.textContent='Ξ'" />
+          </div>
+          <div class="coin-label">ETH</div>
+          <div class="coin-mini-price" id="h-eth-price">—</div>
+          <div class="coin-mini-change" id="h-eth-ch">—</div>
+        </div>
+        <div class="coin-bubble">
+          <div class="coin-anim-wrap bnb">
+            <img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" alt="BNB" onerror="this.parentElement.textContent='🔶'" />
+          </div>
+          <div class="coin-label">BNB</div>
+          <div class="coin-mini-price" id="h-bnb-price">—</div>
+          <div class="coin-mini-change" id="h-bnb-ch">—</div>
+        </div>
+        <div class="coin-bubble">
+          <div class="coin-anim-wrap sol">
+            <img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" alt="SOL" onerror="this.parentElement.textContent='◎'" />
+          </div>
+          <div class="coin-label">SOL</div>
+          <div class="coin-mini-price" id="h-sol-price">—</div>
+          <div class="coin-mini-change" id="h-sol-ch">—</div>
+        </div>
+        <div class="coin-bubble">
+          <div class="coin-anim-wrap xrp">
+            <img src="https://assets.coingecko.com/coins/images/44/small/ripple.png" alt="XRP" onerror="this.parentElement.textContent='💧'" />
+          </div>
+          <div class="coin-label">XRP</div>
+          <div class="coin-mini-price" id="h-xrp-price">—</div>
+          <div class="coin-mini-change" id="h-xrp-ch">—</div>
+        </div>
+        
+      </div>
+
+      <!-- stat chips: top 3 NPR values -->
+      <div class="hero-stats" id="hero-stats">
+        <div class="hero-stat">
+          <div class="label">Bitcoin (BTC) </div>
+          <div class="val" id="hs-btc-nrs">—</div>
+          <div class="val-usd" id="hs-btc-usd">—</div>
+        </div>
+        <div class="hero-stat">
+          <div class="label">Ethereum (ETH) </div>
+          <div class="val" id="hs-eth-nrs">—</div>
+          <div class="val-usd" id="hs-eth-usd">—</div>
+        </div>
+        <div class="hero-stat">
+          <div class="label">Solana (SOL) </div>
+          <div class="val" id="hs-sol-nrs">—</div>
+          <div class="val-usd" id="hs-sol-usd">—</div>
+        </div>
+        <div class="hero-stat">
+          <div class="label">BNB </div>
+          <div class="val" id="hs-bnb-nrs">—</div>
+          <div class="val-usd" id="hs-bnb-usd">—</div>
+        </div>
+      </div>
+
+    </div><!-- /hero-content -->
+  </div><!-- /hero-box -->
+</div>
+
+<!-- ══════════ MARKET SECTION ══════════ -->
+<main>
+  <div class="section-title" style="margin-bottom:24px">
+    <div class="dot"></div>
+    <h2>प्रमुख Crypto मूल्यहरू</h2>
+    <span class="ne">/ All Markets</span>
+  </div>
+
+  <div id="crypto-grid">
+    <div class="sk sk-card"></div>
+    <div class="sk sk-card"></div>
+    <div class="sk sk-card"></div>
+    <div class="sk sk-card"></div>
+    <div class="sk sk-card"></div>
+    <div class="sk sk-card"></div>
+  </div>
+
+  <div id="error-box">
+    <div class="emoji">😕</div>
+    <p>मूल्य लोड गर्न सकिएन।</p>
+    <p>Could not load prices.</p>
+    <small id="error-detail"></small>
+  </div>
+</main>
+
+<!-- ══════════ JOIN THE TEAM SECTION ══════════ -->
+<div class="join-section">
+  <div class="join-box">
+    <div class="join-inner">
+
+      <!-- LEFT: message -->
+      <div class="join-left">
+        
+        <p class="join-msg">
+          When cryptocurrency finally becomes legal in Nepal, we want to be the
+          <strong style="color:#fff">first exchange platform</strong> — so that every Nepali
+          can have a fair, transparent, and accessible trading experience.
+         
+        </p>
+
+        <div class="join-perks">
+          <div class="join-perk">
+            <div class="icon">⚡</div>
+            <span>Be a founding team member </span>
+          </div>
+          
+          <div class="join-perk">
+            <div class="icon">🌏</div>
+            <span>Shape Nepal's crypto future</span>
+          </div>
+          <div class="join-perk">
+            <div class="icon">🤝</div>
+            <span>Open to all skills: dev, finance, legal, marketing</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: email CTA -->
+      <div class="join-right">
+        <h3> Reach Out</h3>
+        <p>
+          Interested? Just send us your email at the email below.
+        </p>
+
+        <div class="email-highlight">
+          <span class="label">📧</span>
+          <a href="mailto:cryptofornepal01@gmail.com">cryptofornepal01@gmail.com</a>
+        </div>
+
+        <a class="btn-submit"
+           href="mailto:cryptofornepal01@gmail.com?subject=CryptoNepal%20Team%20%E2%80%94%20I%27m%20Interested&body=नमस्ते%20CryptoNepal%20Team%2C%0A%0AI%20am%20interested%20in%20joining%20the%20founding%20team.%0A%0AName%3A%0AField%2FSkill%3A%0AMessage%3A">
+         Send Email →
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+
+
+<!-- ══════════ SCRIPT ══════════ -->
+<script>
+  // ── Coin config ─────────────────────────────────────────────
+  const COINS = [
+    { id:'bitcoin',     name:'Bitcoin',   symbol:'BTC',  emoji:'₿',  heroKey:'btc' },
+    { id:'ethereum',    name:'Ethereum',  symbol:'ETH',  emoji:'Ξ',  heroKey:'eth' },
+    { id:'binancecoin', name:'BNB',       symbol:'BNB',  emoji:'🔶', heroKey:'bnb' },
+    { id:'solana',      name:'Solana',    symbol:'SOL',  emoji:'◎',  heroKey:'sol' },
+    { id:'cardano',     name:'Cardano',   symbol:'ADA',  emoji:'🔵', heroKey:null  },
+    { id:'dogecoin',    name:'Dogecoin',  symbol:'DOGE', emoji:'🐶', heroKey:'doge'},
+    { id:'ripple',      name:'XRP',       symbol:'XRP',  emoji:'💧', heroKey:'xrp' },
+    { id:'polkadot',    name:'Polkadot',  symbol:'DOT',  emoji:'⚫', heroKey:null  },
+    { id:'tron',        name:'TRON',      symbol:'TRX',  emoji:'🔺', heroKey:null  },
+    { id:'avalanche-2', name:'Avalanche', symbol:'AVAX', emoji:'🔴', heroKey:null  },
+    { id:'chainlink',   name:'Chainlink', symbol:'LINK', emoji:'🔗', heroKey:null  },
+    { id:'litecoin',    name:'Litecoin',  symbol:'LTC',  emoji:'🪙', heroKey:null  },
+  ];
+
+  const IMAGE_MAP = {
+    'bitcoin':      [1,     'bitcoin'],
+    'ethereum':     [279,   'ethereum'],
+    'binancecoin':  [825,   'bnb-icon2_2x'],
+    'solana':       [4128,  'solana'],
+    'cardano':      [975,   'cardano'],
+    'dogecoin':     [5,     'dogecoin'],
+    'ripple':       [44,    'ripple'],
+    'polkadot':     [12171, 'polkadot'],
+    'tron':         [1094,  'tron-bnb'],
+    'avalanche-2':  [12559, 'avalanche-avax-logo'],
+    'chainlink':    [877,   'chainlink-new-logo'],
+    'litecoin':     [2,     'litecoin'],
+  };
+
+  const COIN_IDS = COINS.map(c => c.id).join(',');
+  let nprRate = 149;
+
+  // ── Formatters ──────────────────────────────────────────────
+  function fmt(n) {
+    if (n == null) return 'N/A';
+    if (n >= 1000) return n.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+    if (n >= 1)    return n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+    return n.toLocaleString('en-IN', { minimumFractionDigits: 4, maximumFractionDigits: 6 });
+  }
+  function fmtShort(n) {
+    if (n == null) return 'N/A';
+    if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'K';
+    return '$' + fmt(n);
+  }
+  function fmtNPR(n) {
+    if (n == null) return 'N/A';
+    if (n >= 10000000) return 'रू ' + (n/10000000).toFixed(2) + ' करोड';
+    if (n >= 100000)   return 'रू ' + (n/100000).toFixed(2) + ' लाख';
+    if (n >= 1000)     return 'रू ' + n.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+    return 'रू ' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+  }
+
+  function imgUrl(id) {
+    const m = IMAGE_MAP[id];
+    return m ? `https://assets.coingecko.com/coins/images/${m[0]}/small/${m[1]}.png` : '';
+  }
+
+  // ── Fetch exchange rate ──────────────────────────────────────
+  async function fetchNPRRate() {
+    try {
+      const r = await fetch('https://open.er-api.com/v6/latest/USD');
+      const d = await r.json();
+      if (d.rates?.NPR) {
+        nprRate = d.rates.NPR;
+        document.getElementById('usd-nrs-rate').textContent = nprRate.toFixed(2);
+        document.getElementById('rate-source').textContent = '✓ लाइभ दर';
+        document.getElementById('rate-source').style.color = '#22c55e';
+      } else throw 0;
+    } catch {
+      nprRate = 149;
+      document.getElementById('usd-nrs-rate').textContent = nprRate.toFixed(2) + ' ≈';
+      document.getElementById('rate-source').textContent = 'अनुमानित दर';
+    }
+  }
+
+  // ── Fetch crypto prices ──────────────────────────────────────
+  async function fetchCryptoPrices() {
+    const url = `https://api.coingecko.com/api/v3/simple/price?ids=${COIN_IDS}&vs_currencies=usd&include_24hr_change=true`;
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    return r.json();
+  }
+
+  // ── Update hero bubbles ──────────────────────────────────────
+  function updateHero(data) {
+    COINS.forEach(coin => {
+      if (!coin.heroKey) return;
+      const info = data[coin.id];
+      if (!info) return;
+      const up = info.usd_24h_change >= 0;
+      const priceEl = document.getElementById(`h-${coin.heroKey}-price`);
+      const chEl    = document.getElementById(`h-${coin.heroKey}-ch`);
+      if (priceEl) priceEl.textContent = fmtShort(info.usd);
+      if (chEl) {
+        chEl.textContent = `${up ? '▲' : '▼'} ${Math.abs(info.usd_24h_change).toFixed(2)}%`;
+        chEl.className = `coin-mini-change ${up ? 'up' : 'down'}`;
+      }
+    });
+
+    // hero stat chips
+    const update = (id, nrsEl, usdEl) => {
+      const info = data[id];
+      if (!info) return;
+      const nrs = info.usd * nprRate;
+      const el1 = document.getElementById(nrsEl);
+      const el2 = document.getElementById(usdEl);
+      if (el1) el1.textContent = fmtNPR(nrs);
+      if (el2) el2.textContent = '$ ' + fmt(info.usd);
+    };
+    update('bitcoin',     'hs-btc-nrs', 'hs-btc-usd');
+    update('ethereum',    'hs-eth-nrs', 'hs-eth-usd');
+    update('solana',      'hs-sol-nrs', 'hs-sol-usd');
+    update('binancecoin', 'hs-bnb-nrs', 'hs-bnb-usd');
+  }
+
+  // ── Render price cards ───────────────────────────────────────
+  function renderCards(data) {
+    const grid = document.getElementById('crypto-grid');
+    grid.innerHTML = '';
+
+    COINS.forEach(coin => {
+      const info = data[coin.id];
+      if (!info) return;
+      const usd    = info.usd;
+      const change = info.usd_24h_change;
+      const nrs    = usd * nprRate;
+      const up     = change >= 0;
+
+      const card = document.createElement('div');
+      card.className = `card ${up ? 'up' : 'down'}`;
+      card.innerHTML = `
+        <div class="card-header">
+          <div class="coin-info">
+            <div class="coin-icon">
+              <img src="${imgUrl(coin.id)}"
+                   onerror="this.parentElement.textContent='${coin.emoji}'"
+                   alt="${coin.name}" />
+            </div>
+            <div>
+              <div class="coin-name">${coin.name}</div>
+              <div class="coin-symbol">${coin.symbol}</div>
+            </div>
+          </div>
+          <div class="change-badge ${up ? 'up' : 'down'}">
+            ${up ? '▲' : '▼'} ${Math.abs(change).toFixed(2)}%
+          </div>
+        </div>
+        <div class="prices">
+          <div class="price-row">
+            <div class="price-label">
+              USD Price
+              <span class="ne">अमेरिकी डलर</span>
+            </div>
+            <div class="price-val usd">$ ${fmt(usd)}</div>
+          </div>
+          <div class="price-row">
+            <div class="price-label">
+              NPR मूल्य
+              <span class="ne">नेपाली रुपैयाँ</span>
+            </div>
+            <div class="price-val nrs">${fmtNPR(nrs)}</div>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  }
+
+  // ── Main fetch ───────────────────────────────────────────────
+  async function fetchAll() {
+    document.getElementById('error-box').style.display = 'none';
+    try {
+      await fetchNPRRate();
+      const data = await fetchCryptoPrices();
+      renderCards(data);
+      updateHero(data);
+    } catch (err) {
+      document.getElementById('crypto-grid').innerHTML = '';
+      document.getElementById('error-box').style.display = 'block';
+      document.getElementById('error-detail').textContent = err.message;
+    }
+  }
+
+
+  // ── Date ─────────────────────────────────────────────────────
+  (function() {
+    const ne = new Date().toLocaleDateString('ne-NP', {
+      weekday:'long', year:'numeric', month:'long', day:'numeric'
+    });
+    document.getElementById('header-date').textContent = ne;
+  })();
+
+  // ── Init ─────────────────────────────────────────────────────
+  fetchAll();
+  setInterval(fetchAll, 60000);
+</script>
+</body>
+</html>
